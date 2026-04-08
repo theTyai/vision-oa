@@ -16,7 +16,7 @@ const Navbar = ({ subtitle }) => {
     return () => document.removeEventListener('mousedown', handler)
   }, [])
 
-  const handleLogout = () => { logout(); navigate(user.role==='admin' ? '/admin/login' : '/login') }
+  const handleLogout = () => { logout(); navigate('/login') }
 
   const initials = user?.name?.split(' ').map(n => n[0]).join('').toUpperCase().slice(0, 2) || '?'
 

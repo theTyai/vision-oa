@@ -7,31 +7,37 @@ import VisionLogo from '../components/VisionLogo'
 
 const BRANCHES = ['CSE', 'IT', 'ECE', 'EE', 'ME', 'CE', 'Other']
 
-export default function Register() {
+const Field = ({ label, error, children }) => (
+  <div>
+    <label className="input-label">{label}</label>
+    {children}
+    {error && <p className="text-red-400 text-xs font-mono mt-1">{error}</p>}
+  </div>
+)
+
+const Register = () => {
   const [form, setForm] = useState({ name:'', email:'', scholarNumber:'', branch:'CSE', password:'', confirmPassword:'' })
   const [errors, setErrors] = useState({})
-  const [error, setError]   = useState('')
   const [loading, setLoading] = useState(false)
   const [showPass, setShowPass] = useState(false)
   const { login } = useAuth()
   const navigate = useNavigate()
 
-  const set = (k, v) => { setErrors(p=>({...p,[k]:''})); setError(''); setForm(p=>({...p,[k]:v})) }
+  const set = (k, v) => { setForm(p => ({ ...p, [k]: v })); setErrors(p => ({ ...p, [k]: '' })) }
 
   const validate = () => {
     const e = {}
-    if (!form.name.trim())                      e.name = 'Full name required'
-    if (!form.email.includes('@'))               e.email = 'Valid email required'
-    if (!form.scholarNumber.trim())              e.scholarNumber = 'Scholar number required'
-    if (form.password.length < 6)               e.password = 'Minimum 6 characters'
-    if (form.password !== form.confirmPassword)  e.confirmPassword = 'Passwords do not match'
+    if (!form.name.trim())          e.name = 'Full name is required'
+    if (!form.email.includes('@'))  e.email = 'Valid email required'
+    if (!form.scholarNumber.trim()) e.scholarNumber = 'Scholar number is required'
+    if (form.password.length < 6)   e.password = 'Minimum 6 characters'
+    if (form.password !== form.confirmPassword) e.confirmPassword = 'Passwords do not match'
     setErrors(e)
     return Object.keys(e).length === 0
   }
 
   const handleSubmit = async e => {
     e.preventDefault()
-    setError('')
     if (!validate()) return
     setLoading(true)
     try {
@@ -40,160 +46,109 @@ export default function Register() {
       toast.success('Account created! Welcome.')
       navigate('/dashboard')
     } catch (err) {
-      const msg = err.response?.data?.message || 'Registration failed. Please try again.'
-      setError(msg)
+      toast.error(err.response?.data?.message || 'Registration failed')
     } finally {
       setLoading(false)
     }
   }
 
   return (
-    <div className="min-h-screen bg-[#0b0f0c] flex">
+    <div className="min-h-screen bg-bg grid-bg flex items-center justify-center px-4 py-10 relative overflow-hidden">
 
-      {/* Left panel */}
-      <div className="hidden lg:flex w-[40%] flex-col justify-between p-12 relative overflow-hidden"
-        style={{ background: 'linear-gradient(145deg, #0d1f12, #091508)' }}>
-        <div className="absolute inset-0 opacity-20"
-          style={{
-            backgroundImage: 'linear-gradient(#00ff8812 1px,transparent 1px),linear-gradient(90deg,#00ff8812 1px,transparent 1px)',
-            backgroundSize: '40px 40px'
-          }} />
-        <div className="absolute top-1/3 left-1/2 -translate-x-1/2 w-72 h-72 rounded-full pointer-events-none"
-          style={{ background: 'radial-gradient(circle,#00ff8812 0%,transparent 65%)' }} />
-
-        <VisionLogo size="md" className="relative z-10" />
-
-        <div className="relative z-10 space-y-6">
-          <div>
-            <h1 className="text-3xl font-bold text-white">Join the<br />
-              <span style={{ color: '#00ff88', textShadow: '0 0 20px #00ff8860' }}>Assessment</span>
-            </h1>
-            <p className="text-gray-400 mt-3 text-sm leading-relaxed max-w-xs">
-              Register to participate in Vision CSE Recruitment. Complete both rounds to be considered.
-            </p>
-          </div>
-          <div className="space-y-3">
-            {[
-              { label: 'Scholar Number', desc: 'Your university roll number' },
-              { label: 'Branch', desc: 'CSE, IT, ECE and more' },
-              { label: 'Secure Account', desc: 'JWT protected, bcrypt hashed' },
-            ].map(i => (
-              <div key={i.label} className="flex items-center gap-2">
-                <span className="text-neon text-lg">✓</span>
-                <div>
-                  <p className="text-sm font-semibold text-gray-300">{i.label}</p>
-                  <p className="text-xs text-gray-600">{i.desc}</p>
-                </div>
-              </div>
-            ))}
-          </div>
-        </div>
-
-        <p className="text-xs text-gray-600 font-mono relative z-10">© Vision CSE Department · 2024</p>
+      <div className="pointer-events-none absolute inset-0 overflow-hidden">
+        <div className="absolute top-0 right-0 w-80 h-80 rounded-full opacity-10"
+          style={{ background: 'radial-gradient(circle, #00ff8830 0%, transparent 70%)' }} />
       </div>
 
-      {/* Right panel */}
-      <div className="flex-1 flex items-center justify-center px-6 py-10 overflow-y-auto">
-        <div className="w-full max-w-lg animate-fade-in">
+      <div className="relative w-full max-w-lg animate-fade-in">
 
-          <div className="lg:hidden mb-8 flex justify-center"><VisionLogo size="lg" /></div>
+        <div className="flex flex-col items-center mb-8 gap-2">
+          <VisionLogo size="lg" />
+          <p className="text-xs font-mono text-gray-500 tracking-widest uppercase">Create Your Account</p>
+        </div>
+
+        <div className="card" style={{ border: '1px solid #1f2937', boxShadow: '0 25px 60px #00000060, 0 0 0 1px #00ff8810' }}>
 
           <div className="mb-6">
-            <h2 className="text-2xl font-bold text-white font-mono">Create Account</h2>
-            <p className="text-sm text-gray-400 mt-1">Fill in your details to register as a candidate</p>
+            <h2 className="text-xl font-mono font-bold text-textPrimary">Register</h2>
+            <p className="text-sm text-gray-500 mt-1">Fill in your details to join the assessment</p>
           </div>
 
-          {error && (
-            <div className="mb-5 flex items-start gap-3 rounded-xl px-4 py-3 animate-fade-in"
-              style={{ background: '#ef444415', border: '1px solid #ef444435' }}>
-              <span className="text-red-400">⚠</span>
-              <p className="text-sm text-red-400">{error}</p>
-            </div>
-          )}
+          <form onSubmit={handleSubmit} className="space-y-4">
+            <Field label="Full Name" error={errors.name}>
+              <input value={form.name} onChange={e => set('name', e.target.value)}
+                className={`input-field ${errors.name ? 'border-red-500/50' : ''}`}
+                placeholder="Rahul Sharma" />
+            </Field>
 
-          <form onSubmit={handleSubmit} className="space-y-4" noValidate>
-            {/* Full name */}
-            <div>
-              <label className="input-label">Full Name</label>
-              <input value={form.name} onChange={e=>set('name',e.target.value)}
-                className={`input-field ${errors.name?'border-red-500/50':''}`}
-                placeholder="Rahul Sharma" autoFocus />
-              {errors.name && <p className="text-red-400 text-xs mt-1 font-mono">{errors.name}</p>}
-            </div>
+            <Field label="Email Address" error={errors.email}>
+              <input type="email" value={form.email} onChange={e => set('email', e.target.value)}
+                className={`input-field ${errors.email ? 'border-red-500/50' : ''}`}
+                placeholder="rahul@university.edu" autoComplete="email" />
+            </Field>
 
-            {/* Email */}
-            <div>
-              <label className="input-label">Email Address</label>
-              <input type="email" value={form.email} onChange={e=>set('email',e.target.value)}
-                className={`input-field ${errors.email?'border-red-500/50':''}`}
-                placeholder="you@university.edu" autoComplete="email" />
-              {errors.email && <p className="text-red-400 text-xs mt-1 font-mono">{errors.email}</p>}
-            </div>
-
-            {/* Scholar + Branch */}
             <div className="grid grid-cols-2 gap-4">
-              <div>
-                <label className="input-label">Scholar Number</label>
-                <input value={form.scholarNumber} onChange={e=>set('scholarNumber',e.target.value)}
-                  className={`input-field font-mono text-sm ${errors.scholarNumber?'border-red-500/50':''}`}
+              <Field label="Scholar Number" error={errors.scholarNumber}>
+                <input value={form.scholarNumber} onChange={e => set('scholarNumber', e.target.value)}
+                  className={`input-field font-mono text-sm ${errors.scholarNumber ? 'border-red-500/50' : ''}`}
                   placeholder="0801CS211001" />
-                {errors.scholarNumber && <p className="text-red-400 text-xs mt-1 font-mono">{errors.scholarNumber}</p>}
-              </div>
-              <div>
-                <label className="input-label">Branch</label>
-                <select value={form.branch} onChange={e=>set('branch',e.target.value)}
+              </Field>
+
+              <Field label="Branch">
+                <select value={form.branch} onChange={e => set('branch', e.target.value)}
                   className="input-field appearance-none cursor-pointer">
-                  {BRANCHES.map(b=><option key={b}>{b}</option>)}
+                  {BRANCHES.map(b => <option key={b} value={b}>{b}</option>)}
                 </select>
-              </div>
+              </Field>
             </div>
 
-            {/* Passwords */}
             <div className="grid grid-cols-2 gap-4">
-              <div>
-                <label className="input-label">Password</label>
+              <Field label="Password" error={errors.password}>
                 <div className="relative">
-                  <input type={showPass?'text':'password'} value={form.password}
-                    onChange={e=>set('password',e.target.value)}
-                    className={`input-field pr-14 ${errors.password?'border-red-500/50':''}`}
+                  <input type={showPass ? 'text' : 'password'} value={form.password}
+                    onChange={e => set('password', e.target.value)}
+                    className={`input-field pr-12 ${errors.password ? 'border-red-500/50' : ''}`}
                     placeholder="Min. 6 chars" autoComplete="new-password" />
-                  <button type="button" onClick={()=>setShowPass(p=>!p)}
-                    className="absolute right-3 top-1/2 -translate-y-1/2 text-xs font-mono text-gray-500 hover:text-gray-300 select-none">
-                    {showPass?'HIDE':'SHOW'}
+                  <button type="button" onClick={() => setShowPass(p => !p)}
+                    className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-500 hover:text-gray-300 text-xs font-mono">
+                    {showPass ? 'HIDE' : 'SHOW'}
                   </button>
                 </div>
-                {errors.password && <p className="text-red-400 text-xs mt-1 font-mono">{errors.password}</p>}
-              </div>
-              <div>
-                <label className="input-label">Confirm Password</label>
-                <input type={showPass?'text':'password'} value={form.confirmPassword}
-                  onChange={e=>set('confirmPassword',e.target.value)}
-                  className={`input-field ${errors.confirmPassword?'border-red-500/50':''}`}
-                  placeholder="Repeat" autoComplete="new-password" />
-                {errors.confirmPassword && <p className="text-red-400 text-xs mt-1 font-mono">{errors.confirmPassword}</p>}
-              </div>
+              </Field>
+
+              <Field label="Confirm Password" error={errors.confirmPassword}>
+                <input type={showPass ? 'text' : 'password'} value={form.confirmPassword}
+                  onChange={e => set('confirmPassword', e.target.value)}
+                  className={`input-field ${errors.confirmPassword ? 'border-red-500/50' : ''}`}
+                  placeholder="Repeat password" autoComplete="new-password" />
+              </Field>
             </div>
 
-            <button type="submit" disabled={loading} className="btn-neon w-full py-3.5 text-sm mt-1">
-              {loading ? <><Spinner />Creating account...</> : 'Create Account →'}
+            <button type="submit" disabled={loading} className="btn-neon w-full py-3 mt-2">
+              {loading ? <><SpinIcon />Creating account...</> : 'Create Account'}
             </button>
           </form>
 
-          <div className="mt-5 pt-5 border-t border-gray-800 text-center">
-            <p className="text-sm text-gray-500">
-              Already registered?{' '}
-              <Link to="/login" className="font-semibold hover:underline" style={{ color:'#00ff88' }}>Sign in</Link>
-            </p>
-          </div>
+          <hr className="divider mt-6" />
+          <p className="text-center text-sm text-gray-500">
+            Already registered?{' '}
+            <Link to="/login" className="text-neon hover:underline font-semibold">Sign in</Link>
+          </p>
         </div>
+
+        <p className="text-center text-gray-600 text-xs font-mono mt-6 tracking-wide">
+          © Vision CSE • Recruitment Assessment Platform
+        </p>
       </div>
     </div>
   )
 }
 
-const Spinner = () => (
+const SpinIcon = () => (
   <svg className="animate-spin w-4 h-4" fill="none" viewBox="0 0 24 24">
     <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"/>
     <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z"/>
   </svg>
 )
+
+export default Register
