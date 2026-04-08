@@ -1,207 +1,128 @@
-# Vision CSE — Online Assessment Platform
-## Complete Setup Guide
+<div align="center">
+  <img src="./client/src/assets/logo.png" alt="Vision CSE Logo" width="120" style="border-radius: 20px; margin-bottom: 20px;" />
+  <h1>🚀 Vision CSE Recruitment Platform</h1>
+  <p><strong>Advanced Assessment & Proctoring Environment</strong></p>
+  
+  [![Node.js](https://img.shields.io/badge/Node.js-v18+-green.svg?style=for-the-badge&logo=node.js)](https://nodejs.org)
+  [![React](https://img.shields.io/badge/React-18.x-blue.svg?style=for-the-badge&logo=react)](https://reactjs.org/)
+  [![MongoDB](https://img.shields.io/badge/MongoDB-Atlas-47A248.svg?style=for-the-badge&logo=mongodb)](https://www.mongodb.com/)
+  [![Express](https://img.shields.io/badge/Express.js-Backend-000000.svg?style=for-the-badge&logo=express)](https://expressjs.com/)
+  [![TailwindCSS](https://img.shields.io/badge/Tailwind-CSS-38B2AC.svg?style=for-the-badge&logo=tailwind-css)](https://tailwindcss.com/)
+</div>
 
 ---
 
-## Prerequisites
+## 📖 Overview
 
-| Tool | Version | Check |
-|------|---------|-------|
-| Node.js | v18 or higher | `node -v` |
-| npm | v9 or higher | `npm -v` |
-| MongoDB Atlas account | Free tier is fine | cloud.mongodb.com |
+The **Vision CSE Recruitment Platform** is an enterprise-grade candidate assessment application designed natively for campus-level core recruitment. Engineered to evaluate advanced Data Structures & Algorithms, Full-Stack Web Development, and core CS fundamentals—the application ensures absolute assessment integrity utilizing zero-tolerance anti-cheat protocols alongside real-time proctoring sockets.
 
----
+### ✨ Core Features
 
-## Step 1 — MongoDB Atlas Setup
-
-### 1a. Create a free cluster
-1. Go to **https://cloud.mongodb.com** → sign in
-2. Click **"Build a Database"** → choose **Free (M0)**
-3. Pick any region close to you → click **Create**
-
-### 1b. Create a database user
-1. Left sidebar → **Database Access** → **Add New Database User**
-2. Choose **Password** auth
-3. Username: `visionadmin`, set a strong password
-4. Role: **"Read and write to any database"**
-5. Click **Add User**
-
-### 1c. Whitelist your IP
-1. Left sidebar → **Network Access** → **Add IP Address**
-2. Development: click **"Allow Access from Anywhere"** (0.0.0.0/0)
-3. Click **Confirm**
-
-### 1d. Get your connection string
-1. Click **"Connect"** on your cluster → **"Drivers"** → **Node.js**
-2. Copy the string, replace `<password>` with your actual password:
-   ```
-   mongodb+srv://visionadmin:YourPassword@cluster0.xxxxx.mongodb.net/vision-oa?retryWrites=true&w=majority
-   ```
+- **Strict Tab Tracking & Proctoring:** Zero-tolerance browser bounds monitoring. Single-strike tab switching or unfocusing triggers immediate, irrevocable auto-submission enforcing strict integrity.
+- **Native Fullscreen Hooking:** Browser APIs forcibly expand and rigidly lock exactly upon MCQ test initialization, stopping external visibility.
+- **Automated SMTP Account Verification:** Embedded JWT-based pipeline hooking into Nodemailer parsing localized verification dispatches bounding accounts directly to University domains.
+- **Real-Time Admin Sockets:** Instant bidirectional telemetry parsing candidate violation flags natively onto the admin board.
+- **Live Code Execution:** Pre-configured architecture scaling seamlessly onto standard compiler API microservices (e.g. Judge0).
+- **Glassmorphic Premium UI/UX:** A highly tailored, immersive "Dark Mode" aesthetic engineered exclusively for sophisticated assessment interfaces.
 
 ---
 
-## Step 2 — Configure Environment
+## 🛠️ Technology Stack
 
-Open `server/.env` and fill in:
+**Frontend Architecture:**
+- React.js (v18+)
+- Socket.IO Client (Real-time architecture)
+- Tailwind CSS (Pre-compiled highly optimized styling)
+- React Router DOM
+- React Hot Toast 
+
+**Backend Architecture:**
+- Node.js & Express.js
+- MongoDB (Mongoose ORM)
+- JSON Web Tokens (Secure stateless handling)
+- Nodemailer (Automated Email Auth)
+- Crypto (Token signatures)
+
+---
+
+## 🚀 Local Deployment Setup
+
+### 1. Database & Environment Configuration
+
+Ensure you map an active Database target using [MongoDB Atlas](https://cloud.mongodb.com/). 
+
+Create a `.env` file explicitly in the `server/` root directory:
 
 ```env
-MONGO_URI=mongodb+srv://visionadmin:YourPassword@cluster0.xxxxx.mongodb.net/vision-oa?retryWrites=true&w=majority
-JWT_SECRET=paste_a_long_random_string_here
+# Database Credentials
+MONGO_URI=mongodb+srv://<admin>:<password>@cluster0.xxxx.mongodb.net/vision-oa?retryWrites=true&w=majority
+
+# Security Architecture
+JWT_SECRET=super_secure_randomized_cryptographic_hash_64_byte
 PORT=5000
+
+# Client Configuration
 CLIENT_URL=http://localhost:5173
 NODE_ENV=development
+
+# SMTP Configuration (Candidate Account Email Verification)
+SMTP_EMAIL=your-corporate-email@gmail.com
+SMTP_PASSWORD=your-google-app-password
 ```
 
-Generate a JWT secret:
-```bash
-node -e "console.log(require('crypto').randomBytes(64).toString('hex'))"
-```
+### 2. Dependency Initialization
 
----
-
-## Step 3 — Install & Seed
+Execute module installations strictly across both micro-directories.
 
 ```bash
-# Install server dependencies
-cd vision-oa/server
+# Initialize API Backend
+cd server
 npm install
 
-# Install client dependencies
+# Initialize Client Frontend
 cd ../client
 npm install
-
-# Seed database (creates questions + admin account)
-cd ../server
-npm run seed
 ```
 
-Seed creates:
-- 15 sample MCQ questions
-- 3 coding problems (Easy / Medium / Hard)
-- Default test config (MCQ starts 5 min from now)
-- Admin account → **admin@visioncse.com** / **Admin@123**
+### 3. Database Seeding
 
----
-
-## Step 4 — Add Your Logo
-
-1. Copy your logo into: `client/src/assets/logo.png`
-2. Open `client/src/components/VisionLogo.jsx`
-3. Find and change:
-   ```js
-   // BEFORE:
-   // import logoSrc from '../assets/logo.png'
-   const logoSrc = null
-
-   // AFTER:
-   import logoSrc from '../assets/logo.png'
-   // (delete the const logoSrc = null line)
-   ```
-
-Supports `.png` `.svg` `.jpg` `.webp` — just match the import extension.
-
----
-
-## Step 5 — Run
+Inject dummy candidate tests alongside configuring the default master Administrator identity natively.
 
 ```bash
-# Terminal 1 — Backend
-cd vision-oa/server
+cd server
+npm run seed
+```
+> **Default Admin Root Access:** `admin@visioncse.com` / `Admin@123`
+
+### 4. Running the Development Servers
+
+Fire up the development environment across independent terminal hosts.
+
+**Host 1 (Backend API & Socket Listener):**
+```bash
+cd server
 npm run dev
-# ✅ MongoDB Atlas Connected
-# 🚀 Server → http://localhost:5000
+# Expected output: "✅ MongoDB Atlas Connected"
+```
 
-# Terminal 2 — Frontend
-cd vision-oa/client
+**Host 2 (React Vite Engine):**
+```bash
+cd client
 npm run dev
-# ➜ http://localhost:5173
+# Expected output: Network UI serving locally at http://localhost:5173
 ```
 
 ---
 
-## Step 6 — Admin First Login
+## 🔒 Security Best Practices for Production
 
-1. Open **http://localhost:5173**
-2. Login: `admin@visioncse.com` / `Admin@123`
-3. Go to **Test Config** tab — set start/end times for both rounds
-4. Go to **MCQ Questions** — add or edit questions
-5. Change your admin password!
+Before launching into a live production domain, ensure your configurations strictly enforce the following protocols:
 
----
-
-## Adding More MCQ Questions
-
-**Via Admin Panel:** Admin → MCQ Questions → Add Question (supports image upload)
-
-**Via Seed (bulk):** Edit `server/scripts/seed.js` → add to `mcqQuestions` array → run `npm run seed:fresh`
-
-```js
-{
-  questionText: 'What is the time complexity of quicksort?',
-  options: ['O(n)', 'O(n log n)', 'O(n²)', 'O(log n)'],
-  correctOption: 1,   // 0=A, 1=B, 2=C, 3=D
-  marks: 4,
-  negativeMarks: 1,
-  order: 16
-}
-```
+1. **Purge Seed Accounts:** Delete `admin@visioncse.com` and generate a unique Master Administrator account hooked to your core domain.
+2. **Network Whitelisting:** Strictly bound your MongoDB Atlas Network rules dropping `0.0.0.0/0` in favor of your AWS / DigitalOcean / Vercel dedicated outbound IP addresses.
+3. **App Passwords:** Do not utilize raw passwords for Nodemailer SMTP. Generate deterministic app-specific application keys utilizing your email provider UI.
+4. **JWT Rotations:** Validate that `JWT_SECRET` is completely unique, un-committed, and maps over 64 bytes.
 
 ---
 
-## Enable Live Code Execution (Optional)
-
-1. Get a free key at **https://rapidapi.com/judge0-official/api/judge0-ce**
-2. Add to `server/.env`:
-   ```env
-   JUDGE0_API_KEY=your_key_here
-   ```
-3. Restart server — Run Code button now works live.
-
----
-
-## Common Errors
-
-| Error | Fix |
-|-------|-----|
-| `MongoServerSelectionError` | Check MONGO_URI in .env. Whitelist your IP in Atlas. |
-| `Cannot find module` | Run `npm install` in both server/ and client/ |
-| Port 5000 in use | Change `PORT=5001` in .env, update vite.config.js proxy |
-| Logo not showing | Uncomment import in VisionLogo.jsx, delete `const logoSrc = null` |
-| Admin panel 403 | Run `npm run seed` to create admin account |
-
----
-
-## Project Structure
-
-```
-vision-oa/
-├── client/src/
-│   ├── assets/            ← PUT YOUR LOGO HERE (logo.png)
-│   ├── components/        ← Navbar, Timer, Editor, Logo
-│   ├── pages/             ← Login, Register, Dashboard, MCQTest, CodingTest, AdminPanel
-│   ├── context/           ← Auth state
-│   └── services/api.js    ← Axios instance
-└── server/
-    ├── config/db.js       ← MongoDB Atlas connection
-    ├── controllers/       ← Business logic
-    ├── models/            ← Mongoose schemas
-    ├── routes/            ← API endpoints
-    ├── scripts/seed.js    ← Database seeder
-    ├── uploads/           ← Question images (auto-created)
-    └── .env               ← Your secrets (never commit!)
-```
-
----
-
-## Security Before Going Live
-
-- [ ] Change default admin password
-- [ ] Use a 64+ char random JWT_SECRET
-- [ ] Restrict Atlas IP to your server only
-- [ ] Set `NODE_ENV=production`
-- [ ] Set `CLIENT_URL` to your real domain
-
----
-
-*Vision CSE Recruitment Assessment Platform*
+> Engineered and maintained securely by the **Vision CSE Software Core Team**. All rights reserved computationally.
