@@ -1,6 +1,7 @@
 import { io } from 'socket.io-client'
+import { ROOT_URL } from './api'
 
-const socket = io('http://localhost:5000', {
+const socket = io(ROOT_URL, {
   autoConnect: false,
   reconnection: true,
   reconnectionDelay: 1000,

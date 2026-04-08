@@ -1,7 +1,7 @@
 import { useState, useEffect, useCallback, useRef } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { toast } from 'react-hot-toast'
-import api from '../services/api'
+import api, { ROOT_URL } from '../services/api'
 import { useAuth } from '../context/AuthContext'
 import VisionLogo from '../components/VisionLogo'
 
@@ -370,7 +370,7 @@ export default function MCQTest() {
                 {q.questionImage && (
                   <div style={{marginBottom:'1.5rem',borderRadius:10,overflow:'hidden',border:'1px solid #222',background:'#0f0f0f',
                     display:'flex',alignItems:'center',justifyContent:'center',padding:'1rem'}}>
-                    <img src={`http://localhost:5000${q.questionImage}`} alt="Question"
+                    <img src={`${ROOT_URL}${q.questionImage}`} alt="Question"
                       style={{maxWidth:'100%',maxHeight:320,objectFit:'contain',borderRadius:6}} />
                   </div>
                 )}

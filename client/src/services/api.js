@@ -1,7 +1,9 @@
 import axios from 'axios'
 
+export const ROOT_URL = 'https://vision-oa-production.up.railway.app'
+
 const api = axios.create({
-  baseURL: 'https://vision-oa-production.up.railway.app/api',
+  baseURL: `${ROOT_URL}/api`,
   headers: { 'Content-Type': 'application/json' }
 })
 

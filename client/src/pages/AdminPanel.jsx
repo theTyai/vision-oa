@@ -1,7 +1,7 @@
 import { useState, useEffect, useRef } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { toast } from 'react-hot-toast'
-import api from '../services/api'
+import api, { ROOT_URL } from '../services/api'
 import { useAuth } from '../context/AuthContext'
 import VisionLogo from '../components/VisionLogo'
 import socket, { connectAdminSocket } from '../services/socket'
@@ -76,7 +76,7 @@ function MCQTab() {
   const openEdit = q => {
     setForm({ questionText:q.questionText, options:[...q.options], correctOption:q.correctOption, marks:q.marks, negativeMarks:q.negativeMarks, order:q.order||0 })
     setEditQ(q); setImgFile(null)
-    setImgPreview(q.questionImage ? `http://localhost:5000${q.questionImage}` : null)
+    setImgPreview(q.questionImage ? `${ROOT_URL}${q.questionImage}` : null)
     setShowForm(true); window.scrollTo({top:0,behavior:'smooth'})
   }
   const cancel = () => { setShowForm(false); setEditQ(null); setImgPreview(null); setImgFile(null) }

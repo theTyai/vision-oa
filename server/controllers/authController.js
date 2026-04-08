@@ -74,7 +74,8 @@ exports.register = async (req, res) => {
     });
 
     // Automated Nodemailer pipeline intercepting generated Crypto IDs
-    const verifyUrl = `http://localhost:5000/api/auth/verify-email/${emailVerificationToken}`;
+    const apiUrl = process.env.API_URL || 'http://localhost:5000';
+    const verifyUrl = `${apiUrl}/api/auth/verify-email/${emailVerificationToken}`;
     await sendVerificationEmail(user.email, verifyUrl);
 
     res.status(201).json({
@@ -101,7 +102,8 @@ exports.verifyEmail = async (req, res) => {
     user.emailVerificationExpires = undefined;
     await user.save();
     
-    res.redirect('http://localhost:5173/login?verified=true');
+    const clientUrl = process.env.CLIENT_URL || 'http://localhost:5173';
+    res.redirect(`${clientUrl}/login?verified=true`);
   } catch (err) {
     res.status(500).send('Server Error');
   }
