@@ -6,7 +6,8 @@
     "start": "node index.js",
     "dev": "nodemon index.js",
     "seed": "node scripts/seed.js",
-    "seed:fresh": "node scripts/seed.js --clear"
+    "seed:fresh": "node scripts/seed.js --clear",
+    "build": "echo 'No build step required'"
   },
   "dependencies": {
     "bcryptjs": "^2.4.3",
