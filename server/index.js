@@ -1,21 +1,21 @@
 require('dotenv').config()
-const express    = require('express')
-const http       = require('http')
+const express = require('express')
+const http = require('http')
 const { Server } = require('socket.io')
-const cors       = require('cors')
-const path       = require('path')
-const connectDB  = require('./config/db')
+const cors = require('cors')
+const path = require('path')
+const connectDB = require('./config/db')
 
-const authRoutes  = require('./routes/authRoutes')
-const mcqRoutes   = require('./routes/mcqRoutes')
+const authRoutes = require('./routes/authRoutes')
+const mcqRoutes = require('./routes/mcqRoutes')
 const adminRoutes = require('./routes/adminRoutes')
 
-const app    = express()
+const app = express()
 const server = http.createServer(app)
 
 // ── Socket.io setup ───────────────────────────────────────────────────────────
 const io = new Server(server, {
-  cors: { origin: process.env.CLIENT_URL || 'http://localhost:5173', credentials: true }
+  cors: { origin: process.env.CLIENT_URL, credentials: true }
 })
 
 // Expose io to routes via app.locals
@@ -47,15 +47,15 @@ io.on('connection', (socket) => {
 app.locals.onlineUsers = onlineUsers
 
 // ── Middleware ────────────────────────────────────────────────────────────────
-app.use(cors({ origin: process.env.CLIENT_URL || 'http://localhost:5173', credentials: true }))
+app.use(cors({ origin: process.env.CLIENT_URL, credentials: true }))
 app.use(express.json({ limit: '10mb' }))
 app.use(express.urlencoded({ extended: true, limit: '10mb' }))
 app.use('/uploads', express.static(path.join(__dirname, 'uploads')))
 
 // ── Routes ────────────────────────────────────────────────────────────────────
-app.use('/api/auth',   authRoutes)
-app.use('/api/mcq',    mcqRoutes)
-app.use('/api/admin',  adminRoutes)
+app.use('/api/auth', authRoutes)
+app.use('/api/mcq', mcqRoutes)
+app.use('/api/admin', adminRoutes)
 
 // Health
 app.get('/api/health', (_, res) => res.json({ status: 'OK', env: process.env.NODE_ENV }))
