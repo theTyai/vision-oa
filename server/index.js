@@ -15,7 +15,7 @@ const server = http.createServer(app)
 
 // ── Socket.io setup ───────────────────────────────────────────────────────────
 const io = new Server(server, {
-  cors: { origin: process.env.CLIENT_URL, credentials: true }
+  cors: { origin: "*", credentials: true }
 })
 
 // Expose io to routes via app.locals
