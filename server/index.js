@@ -32,7 +32,15 @@ const corsOptions = {
 }
 
 // ── Socket.io setup ───────────────────────────────────────────────────────────
+<<<<<<< HEAD
 const io = new Server(server, { cors: corsOptions })
+=======
+const io = new Server(server, {
+  cors: {
+    origin: "*"
+  }
+})
+>>>>>>> 90aded2d8cf745cbcbeea35ee413dd0703dbfd2e
 
 // Expose io to routes via app.locals
 app.locals.io = io
@@ -62,7 +70,13 @@ io.on('connection', (socket) => {
 app.locals.onlineUsers = onlineUsers
 
 // ── Middleware ────────────────────────────────────────────────────────────────
+<<<<<<< HEAD
 app.use(cors(corsOptions))
+=======
+app.use(cors({
+  origin: "*"
+}))
+>>>>>>> 90aded2d8cf745cbcbeea35ee413dd0703dbfd2e
 app.use(express.json({ limit: '10mb' }))
 app.use(express.urlencoded({ extended: true, limit: '10mb' }))
 app.use('/uploads', express.static(path.join(__dirname, 'uploads')))
